@@ -16,6 +16,8 @@ class SiteManager:
     def getSiteName(self,siteName):
         if siteName in self.nameToIdDict.keys():
             pass
+        elif siteName.lower() == "audio.stackexchange.com":
+            site_name = "sound.stackexchange.com"
         elif siteName.lower()=="programmers.stackexchange.com":
             siteName = "softwareengineering.stackexchange.com"
         elif siteName.lower()=="meta.programmers.stackexchange.com":
@@ -38,6 +40,24 @@ class SiteManager:
             siteName = "cogsci.stackexchange.com"
         elif siteName.lower()=="facebook.stackoverflow.com":
             siteName = "stackoverflow.com"
+        elif siteName.lower() == "br.stackoverflow.com":
+            siteName = "pt.stackoverflow.com"
+
+        elif siteName.lower() == "communitybuilding.stackexchange.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "answers.onstartups.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "healthcareit.stackexchange.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "embedded.stackexchange.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "operatingsystems.stackexchange.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "htw.stackexchange.com":
+            siteName = "stackoverflow.com"
+        elif siteName.lower() == "theoreticalphysics.stackexchange.com":
+            siteName = "stackoverflow.com"
+
 
         elif siteName.lower().startswith("meta."):
             # in some cases I found that meta.dba.stackexchange.com changed to dba.meta.stackexchange.com
@@ -49,7 +69,9 @@ class SiteManager:
             else:
                 raise Exception("Cannot find the site name " + alternate_name)
         else:
-            raise Exception("Cannot find the site name "+siteName)
+            print("Cannot find: "+siteName)
+            return None
+            #raise Exception("Cannot find the site name "+siteName)
         return siteName
 
 site_manager = SiteManager("/media/parvez/SamsungOneTB/MigrationRecom/data/sites_category.csv")

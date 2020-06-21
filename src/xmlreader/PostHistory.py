@@ -115,6 +115,7 @@ class PostHistory:
     def set_destinationId(self, _destinationId):
         self.destinationId = _destinationId
     def print_postHistory(self):
-        print("Post History Id: "+str(self.id)+" PostHistoryTypeId: "+str(self.postHistoryTypeId)+" PostId: "+str(self.postId)
+        print("Site: "+str(self.site)+" Post History Id: "+str(self.id)+" PostHistoryTypeId: "+str(self.postHistoryTypeId)+" PostId: "+str(self.postId)
             +" RevisionGUID: "+str(self.revisionGUID)+" CreationDate: "+str(self.creationDate)+" UserId: "
-            +str(self.userId)+" UserDisplayName: "+str(self.userDisplayName)+ " Comment: "+str(self.comment)+" Text: "+str(self.text))
+            +str(self.userId)+" UserDisplayName: "+str(self.userDisplayName)+ " Comment: "+str(self.comment)+" Text: "+str(self.text)+
+              " Destination: "+str(self.destination)+" DestinationId: "+str(self.destinationId)+" Origin: "+str(self.origin)+" OriginId: "+str(self.originId))

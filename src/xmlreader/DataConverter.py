@@ -1,13 +1,14 @@
-from xmlreader import LightUser
-from xmlreader import User
-from xmlreader import PostHistory
-from xmlreader import Vote
-from xmlreader import Comment
-from xmlreader import Post
-from xmlreader import LightPost
-from xmlreader import PostLink
-from xmlreader import Badge
-from xmlreader import Tag
+from xmlreader.LightUser import LightUser
+from xmlreader.User import User
+from xmlreader.PostHistory import PostHistory
+from xmlreader.Vote import Vote
+from xmlreader.Comment import Comment
+from xmlreader.Post import Post
+from xmlreader.LightPost import LightPost
+from xmlreader.PostLink import PostLink
+from xmlreader.Badge import Badge
+from xmlreader.Tag import Tag
+from Utility.SiteManager import SiteManager
 
 class DataConverter:
     def __init__(self):
@@ -190,7 +191,7 @@ class DataConverter:
         return comment
     
     @staticmethod
-    def readPostHistory(elem):
+    def readPostHistory(elem, site_manager):
 
         postHistory = PostHistory()
 
@@ -212,7 +213,24 @@ class DataConverter:
         postHistory.set_userId(userId)
         postHistory.set_userDisplayName(userDisplayName)
         postHistory.set_comment(comment)
-        postHistory.set_text(text) 
+        postHistory.set_text(text)
+        if postHistoryTypeId==35 or postHistoryTypeId==36:
+            try:
+                if postHistory.comment is not None and (comment.startswith("from https://") or comment.startswith("from http://")):
+                    site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
+                    site_name = site_manager.getSiteName(site)
+                    postHistory.set_origin(site_name)
+                    postHistory.set_originId(post_id)
+
+                elif postHistory.get_comment() is not None and (
+                        comment.startswith("to https://") or comment.startswith("to http://")):
+                    site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
+                    site_name = site_manager.getSiteName(site)
+                    postHistory.set_destination(site_name)
+                    postHistory.set_destinationId(post_id)
+            except Exception:
+                print("Exception occur in "+comment)
+
         return postHistory
     
     @staticmethod
@@ -264,3 +282,28 @@ class DataConverter:
         badge.set_tagBased(tagBased)
         badge.set_badgeClass(badgeClass)
         return badge
+
+    @staticmethod
+    def get_migrate_data(input):
+        if input.startswith("from http://") or input.startswith("from https://"):
+            index1 = input.index("://")+len("://")
+            index2 = input.index("/",index1)
+            site = input[index1:index2]
+
+            index1 = input.index("/questions/") + len("/questions/")
+            index2 = input.index("/", index1)
+            post_id = input[index1:index2]
+            return (site, int(post_id))
+        elif input.startswith("to http://") or input.startswith("to https://"):
+            index1 = input.index("://") + len("://")
+            index2 = input.index("/", index1)
+            site = input[index1:index2]
+
+            index1 = input.index("/questions/") + len("/questions/")
+            index2 = input.index("/", index1)
+            post_id = input[index1:index2]
+            return (site, int(post_id))
+        else:
+            return None
+
+    light_user = LightUser()
