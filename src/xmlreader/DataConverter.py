@@ -191,7 +191,7 @@ class DataConverter:
         return comment
     
     @staticmethod
-    def readPostHistory(elem, site_manager):
+    def readPostHistory(elem):
 
         postHistory = PostHistory()
 
@@ -214,22 +214,20 @@ class DataConverter:
         postHistory.set_userDisplayName(userDisplayName)
         postHistory.set_comment(comment)
         postHistory.set_text(text)
-        if postHistoryTypeId==35 or postHistoryTypeId==36:
-            try:
-                if postHistory.comment is not None and (comment.startswith("from https://") or comment.startswith("from http://")):
-                    site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
-                    site_name = site_manager.getSiteName(site)
-                    postHistory.set_origin(site_name)
-                    postHistory.set_originId(post_id)
+        try:
+            if postHistory.comment is not None and (
+                    comment.startswith("from https://") or comment.startswith("from http://")):
+                site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
+                postHistory.set_origin(site)
+                postHistory.set_originId(post_id)
 
-                elif postHistory.get_comment() is not None and (
-                        comment.startswith("to https://") or comment.startswith("to http://")):
-                    site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
-                    site_name = site_manager.getSiteName(site)
-                    postHistory.set_destination(site_name)
-                    postHistory.set_destinationId(post_id)
-            except Exception:
-                print("Exception occur in "+comment)
+            elif postHistory.get_comment() is not None and (
+                    comment.startswith("to https://") or comment.startswith("to http://")):
+                site, post_id = DataConverter.get_migrate_data(postHistory.get_comment())
+                postHistory.set_destination(site)
+                postHistory.set_destinationId(post_id)
+        except Exception:
+            print("Exception occur in " + comment)
 
         return postHistory
     

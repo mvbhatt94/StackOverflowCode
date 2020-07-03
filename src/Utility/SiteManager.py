@@ -43,21 +43,9 @@ class SiteManager:
         elif siteName.lower() == "br.stackoverflow.com":
             siteName = "pt.stackoverflow.com"
 
-        elif siteName.lower() == "communitybuilding.stackexchange.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "answers.onstartups.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "healthcareit.stackexchange.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "embedded.stackexchange.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "operatingsystems.stackexchange.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "htw.stackexchange.com":
-            siteName = "stackoverflow.com"
-        elif siteName.lower() == "theoreticalphysics.stackexchange.com":
-            siteName = "stackoverflow.com"
-
+        #These are missing: 1. communitybuilding.stackexchange.com 2. answers.onstartups.com 3.healthcareit.stackexchange.com
+        # 4. embedded.stackexchange.com 5. operatingsystems.stackexchange.com 6. operatingsystems.stackexchange.com
+        # 7. htw.stackexchange.com 8. theoreticalphysics.stackexchange.com
 
         elif siteName.lower().startswith("meta."):
             # in some cases I found that meta.dba.stackexchange.com changed to dba.meta.stackexchange.com
@@ -70,11 +58,10 @@ class SiteManager:
                 raise Exception("Cannot find the site name " + alternate_name)
         else:
             print("Cannot find: "+siteName)
-            return None
-            #raise Exception("Cannot find the site name "+siteName)
+            siteName = None
         return siteName
 
-site_manager = SiteManager("/media/parvez/SamsungOneTB/MigrationRecom/data/sites_category.csv")
-print(site_manager.getSiteName("stackoverflow.com"))
-print(site_manager.getSiteName("psychology.stackexchange.com"))
-print(site_manager.getSiteName("meta.dba.stackexchange.com"))
+#site_manager = SiteManager("/home/local/SAIL/parvezku01/Research/MigrationStudy/data/sites_category.csv")
+#print(site_manager.getSiteName("stackoverflow.com"))
+#print(site_manager.getSiteName("psychology.stackexchange.com"))
+#print(site_manager.getSiteName("meta.dba.stackexchange.com"))
