@@ -10,11 +10,11 @@ from xmlreader.DataConverter import DataConverter
 class DataIndexer:
     def __init__(self):
     #The folder can contain hidden directory. so we ignore them
-       self.list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/scratch/parvezku01/MigrationStudy/stackexchange_datadump") if f.is_dir() and f.name.startswith(".") is False]
+       self.list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/media/parvez/SamsungOneTB/MigrationRecom/StackExchangeData") if f.is_dir() and f.name.startswith(".") is False]
     def index_site(self,path,name):
         postIdToPosition = {}
         count = 0
-        with open("/scratch/parvezku01/MigrationStudy/post_index/"+name+".ser", "wb") as serializePostFile,open("/scratch/parvezku01/MigrationStudy/post_index/"+name+"_position.ser", "wb") as serializePositionFile:
+        with open("/media/parvez/IntelSSD/MigrationRecommender/post_index_full/"+name+"_full.ser", "wb") as serializePostFile,open("/media/parvez/IntelSSD/MigrationRecommender/post_index_full/"+name+"_position_full.ser", "wb") as serializePositionFile:
             for event, elem in etree.iterparse(path + "/Posts.xml", events=("start", "end", "start-ns", "end-ns")):
                 if elem.tag == "row" and event == "start":
                     count = count + 1
@@ -22,7 +22,7 @@ class DataIndexer:
                         print("Progress of reading posts: " + str(count))
                     post = DataConverter.readPost(elem)
                     post.set_site(name)
-                    if post.get_postTypeId() == 1 and post.get_score()>1:
+                    if post.get_postTypeId() == 1:
                         start_position = serializePostFile.tell()
                         pickle.dump(obj=post, file=serializePostFile)
                         postIdToPosition[post.get_id()] = start_position

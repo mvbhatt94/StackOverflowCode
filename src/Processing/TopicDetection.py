@@ -5,19 +5,18 @@ from lxml import etree
 
 from Utility.SiteManager import SiteManager
 from xmlreader.DataConverter import DataConverter
-
 '''The goal of this class is to collect tags or topics of migrated posts'''
 class TopicDetector:
     def __init__(self):
     #The folder can contain hidden directory. so we ignore them
-       self.list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/scratch/parvezku01/MigrationStudy/stackexchange_datadump") if f.is_dir() and f.name.startswith(".") is False]
+       self.list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/media/parvez/SamsungOneTB/MigrationRecom/StackExchangeData") if f.is_dir() and f.name.startswith(".") is False]
     def index_site(self,path,name,siteNameToMigratedPhDict, siteNameToMigratedPostTopic):
 
         # Step1: load serialized migrated post history data set
         phIdToPhDict = siteNameToMigratedPhDict[name]
         count = 0
 
-        # Step-2: determine migrated post in this site
+        #Step-2: determine migrated post in this site
         migrated_post_set = set()
         for id in phIdToPhDict:
             ph=phIdToPhDict[id]
@@ -42,7 +41,7 @@ class TopicDetector:
         start_time = time.time()
         site_count = 0
         siteNameToMigratedPhDict = None
-        with open("/scratch/parvezku01/MigrationStudy/serialize/migrate_ph_dict.ser", "rb") as pickle_file:
+        with open("/media/parvez/IntelSSD/MigrationRecommender/serialize/migrate_ph_dict.ser", "rb") as pickle_file:
             siteNameToMigratedPhDict = pickle.load(pickle_file)
             print("Total sites: "+str(len(siteNameToMigratedPhDict)))
 
@@ -51,7 +50,7 @@ class TopicDetector:
                 self.index_site(path, name, siteNameToMigratedPhDict, siteNameToMigratedPostTopic)
                 print("Completed: " + str(site_count) + "/" + str(len(self.list_subfolders_with_paths)) + " " + name)
                 site_count = site_count + 1
-            with open("/scratch/parvezku01/MigrationStudy/serialize/migrated_post_topic.ser", "wb") as serializeFile:
+            with open("/media/parvez/IntelSSD/MigrationRecommender/serialize/migrated_post_topic.ser", "wb") as serializeFile:
                 pickle.dump(obj=siteNameToMigratedPostTopic, file=serializeFile)
         print("--- %s seconds ---" % (time.time() - start_time))
 

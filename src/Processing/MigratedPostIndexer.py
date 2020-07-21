@@ -6,11 +6,11 @@ from lxml import etree
 from Utility.SiteManager import SiteManager
 from xmlreader.DataConverter import DataConverter
 
-list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/scratch/parvezku01/MigrationStudy/stackexchange_datadump") if f.is_dir() and f.name.startswith(".") is False]
+list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir("/media/parvez/SamsungOneTB/MigrationRecom/StackExchangeData") if f.is_dir() and f.name.startswith(".") is False]
 siteNameToMigratedPhDict = None
 
 #step-1: load the migrated post history dictionary
-with open("/scratch/parvezku01/MigrationStudy/serialize/migrate_ph_dict.ser", "rb") as pickle_file:
+with open("/media/parvez/IntelSSD/MigrationRecommender/serialize/migrate_ph_dict.ser", "rb") as pickle_file:
     siteNameToMigratedPhDict = pickle.load(pickle_file)
 print("Total sites: " + str(len(siteNameToMigratedPhDict)))
 
@@ -42,7 +42,7 @@ for (path, name) in list_subfolders_with_paths:
     site_count = site_count + 1
 
 #step-4: serialize the data
-with open("/scratch/parvezku01/MigrationStudy/serialize/migrated_post_dict.ser", "wb") as pickle_file:
+with open("/media/parvez/IntelSSD/MigrationRecommender/serialize/migrated_post_dict.ser", "wb") as pickle_file:
     pickle.dump(obj=siteNameToMigratedPostDict, file=pickle_file)
 
 

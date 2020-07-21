@@ -1,5 +1,7 @@
 import os
 from lxml import etree
+from whoosh.analysis import RegexTokenizer
+from whoosh.analysis import LowercaseFilter
 from xmlreader.DataConverter import DataConverter
 from bs4 import BeautifulSoup
 from whoosh.index import create_in, open_dir
@@ -13,15 +15,15 @@ from xmlreader.Post import Post
 class WhooshIndexer:
     def __init__(self):
         self.list_subfolders_with_paths = [(f.path, f.name) for f in os.scandir(
-            "/scratch/parvezku01/MigrationStudy/stackexchange_datadump") if
+            "/media/parvez/SamsungOneTB/MigrationRecom/StackExchangeData") if
                                      f.is_dir() and f.name.startswith(".") is False]
-        self.output_dir = "/scratch/parvezku01/MigrationStudy/whoosh_index_basic"
+        self.output_dir = "/media/parvez/IntelSSD/MigrationRecommender/whoosh_index_basic"
     def index(self):
         site_count = 0
 
         for (path, name) in self.list_subfolders_with_paths:
 
-            schema = Schema(title=TEXT(stored=True), id=TEXT(stored=True), content=TEXT(stored=True))
+            schema = Schema(title=TEXT(analyzer=RegexTokenizer() | LowercaseFilter(), stored=True), id=TEXT(stored=True), content=TEXT(analyzer=RegexTokenizer() | LowercaseFilter(), stored=True,))
 
             dir_path = self.output_dir+"/" + name
             print("I am working on...{} ".format(name))
@@ -30,7 +32,7 @@ class WhooshIndexer:
             ix = create_in(dir_path, schema)
             writer = ix.writer() #BufferedWriter(ix,period=120,limit=100000)
             count = 0
-            with open("/scratch/parvezku01/MigrationStudy/post_index/"+name+".ser", "rb") as pickle_file, open("/scratch/parvezku01/MigrationStudy/post_index/"+name+"_position.ser", "rb") as pickle_position_file:
+            with open("/media/parvez/IntelSSD/MigrationRecommender/post_index/"+name+".ser", "rb") as pickle_file, open("/media/parvez/IntelSSD/MigrationRecommender/post_index/"+name+"_position.ser", "rb") as pickle_position_file:
                 postIdToPositionDict = pickle.load(pickle_position_file)
                 for id in postIdToPositionDict:
                     if (count % 1000000 == 0):
